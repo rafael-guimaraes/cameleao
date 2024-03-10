@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camaleão - Salas</title>
+</head>
+<body>
+    <h1>Camaleão</h1>
+    <button id="btn_criar">Criar uma sala</button>
+    <button id="btn_entrar">Entrar em uma sala</button>
+    <h2>Salas disponíveis:</h2>
+    <ul id="lista_sala"></ul>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const lista_sala = document.getElementById('lista_sala');
+
+        document.getElementById('btn_entrar').addEventListener('click', () => {
+            let codigo_sala = prompt('Por favor, digite o código da sala:'); 
+            window.location.href = `sala.html?id=${codigo_sala}`;
+            
+        });
+
+        document.getElementById('btn_criar').addEventListener('click', () => {
+            socket.emit('criar_sala');
+        });
+
+        socket.on('sala_criada', (id_sala) => {
+            window.location.href = `sala.html?id=${id_sala}`;
+        });
+
+        socket.on('erro', (mensagem) => {
+            alert(mensagem);
+        });
+
+        socket.on('salas_disponiveis', (salas) => {
+            lista_sala.innerHTML = '';
+            salas.forEach(sala => {
+                const item = document.createElement('li');
+                const entrar = document.createElement('a');
+                entrar.href = `sala.html?id=${sala.id}`
+                entrar.textContent = `Sala de ${sala.dono.nome}`;
+                item.appendChild(entrar);
+                lista_sala.appendChild(item);
+            });
+        });
+
+        socket.emit('listar_salas');
+    </script>
+</body>
+</html>
