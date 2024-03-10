@@ -20,10 +20,10 @@
         document.getElementById('btn_entrar').addEventListener('click', () => {
             let codigo_sala = prompt('Por favor, digite o código da sala:'); 
             window.location.href = `sala.html?id=${codigo_sala}`;
-            
         });
 
         document.getElementById('btn_criar').addEventListener('click', () => {
+            console.log("a");
             socket.emit('criar_sala');
         });
 
@@ -47,6 +47,8 @@
             });
         });
 
+        
+        socket.emit('sair_sala');
         socket.emit('listar_salas');
     </script>
 </body>
