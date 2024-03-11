@@ -7,11 +7,13 @@
     
 </head>
 <body>
-    <h1>Bem-vindo à sala!</h1>
-    <p>Compartilhe este link com outros para convidá-los para esta sala:</p>
-    <p id="idSala"></p>
-    <p id="chefeSala"></p>
-    <div id="listaUsuarios"></div>
+    <div class="container">
+        <h1>Bem-vindo à sala!</h1>
+        <p>Compartilhe este link com outros para convidá-los para esta sala: <a id="link_sala"></a></p>
+        <div id="listaUsuarios"></div>
+    </div>
+    
+    
     <button id="sairSalaBtn">Sair da Sala</button>
     <button id="iniciarPartidaBtn" style="display:none;">Iniciar Partida</button>   
     <div id="opcaoTexto" style="display:none;">
@@ -27,17 +29,18 @@
         const socket = io();
 
         const urlParams = new URLSearchParams(window.location.search);
-        const idSala = urlParams.get('id');
-        let nomeUsuario = prompt('Por favor, digite seu nome:'); 
+        const id_sala = urlParams.get('id');
+        let nome_usuario = prompt('Por favor, digite seu nome:'); 
 
-        if (!idSala || !nomeUsuario) {
+        if (!id_sala || !nome_usuario) {
             alert('ID da sala ou nome de usuário inválido. Redirecionando para a página principal.');
             window.location.href = 'index.html';
         }
         
-        socket.emit('entrar_sala', { id_sala: idSala, nome_usuario: nomeUsuario }); 
+        socket.emit('entrar_sala', { id_sala: id_sala, nome_usuario: nome_usuario }); 
 
-        document.getElementById('idSala').innerText = `ID da Sala: ${idSala} | Usuário: ${nomeUsuario}` ;
+        document.getElementById('link_sala').innerText = `cameleao.onrender.com?id=${id_sala}` ;
+        document.getElementById('link_sala').href = `cameleao.onrender.com?id=${id_sala}` ;
             
         socket.on('erro', (mensagem) => {
             alert(mensagem);
@@ -45,7 +48,7 @@
         });
         
         document.getElementById('iniciarPartidaBtn').addEventListener('click', () => {
-            socket.emit('iniciar_rodada', idSala); 
+            socket.emit('iniciar_rodada', id_sala); 
         });
 
         document.getElementById('sairSalaBtn').addEventListener('click', () => {
