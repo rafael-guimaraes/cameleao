@@ -118,7 +118,7 @@
         
         <button id="iniciar-rodada" style="visibility: hidden;">Iniciar rodada</button>
         
-        <button id="convidar" style="visibility: hidden;">Convidar</button>
+        <button id="convidar" style="visibility: visible;">Convidar</button>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -164,7 +164,7 @@
                 document.getElementById('info-rodada').style.display = 'block';
                 document.getElementById('convidar').style.visibility = 'visible';
                 if (dono)
-                    document.getElementById('iniciar-rodada').style.visibility = 'hidden';
+                    document.getElementById('iniciar-rodada').style.visibility = 'visible';
                 if (valores.camaleao)
                     document.getElementById('info-rodada').textContent = "Você é o camaleão!";
                 else
