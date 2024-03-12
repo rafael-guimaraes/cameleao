@@ -116,9 +116,9 @@
             <p id="info-rodada"></p>
         </div>
         
-        <button id="iniciar-rodada" style="visibility: hidden;">Iniciar rodada</button>
+        <button id="iniciar-rodada" style="display: none;">Iniciar rodada</button>
         
-        <button id="convidar" style="visibility: visible;">Convidar</button>
+        <button id="convidar">Convidar</button>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -155,16 +155,16 @@
                 document.getElementById('info-rodada').style.display = 'none';
                 document.getElementById('tempo').textContent = `Restam 30 segundos.`;
                 document.getElementById('tema').value = '';
-                document.getElementById('iniciar-rodada').style.visibility = 'hidden';
-                document.getElementById('convidar').style.visibility = 'hidden';
+                document.getElementById('iniciar-rodada').style.display = 'none';
+                document.getElementById('convidar').style.display = 'none';
             } else if (valores.estado === 'entrada') {
                 document.getElementById('tempo').textContent = `Restam ${valores.tempo} segundos.`;
             } else if (valores.estado === 'jogo') {
                 document.getElementById('envio-tema').style.display = 'none';
                 document.getElementById('info-rodada').style.display = 'block';
-                document.getElementById('convidar').style.visibility = 'visible';
+                document.getElementById('convidar').style.display = 'block';
                 if (dono)
-                    document.getElementById('iniciar-rodada').style.visibility = 'visible';
+                    document.getElementById('iniciar-rodada').style.display = 'block';
                 if (valores.camaleao)
                     document.getElementById('info-rodada').textContent = "Você é o camaleão!";
                 else
@@ -185,9 +185,9 @@
             
             const pessoasNaSala = sala.pessoas.length;
             if (dono && pessoasNaSala > 2) {
-                document.getElementById('iniciar-rodada').style.visibility = 'visible';
+                document.getElementById('iniciar-rodada').style.display = 'block';
             } else {
-                document.getElementById('iniciar-rodada').style.visibility = 'hidden';
+                document.getElementById('iniciar-rodada').style.display = 'none';
             }
         });
 
