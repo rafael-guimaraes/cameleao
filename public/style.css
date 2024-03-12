@@ -1,57 +1,71 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
+*,
+*:before,
+*:after{
     padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: #080710;
 }
 
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+div{
+    
+    width: 400px;
+    background-color: rgba(255,255,255,0.13);
+    margin: 100px auto;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    padding: 50px 35px;
 }
-
-h1 {
+div *{
+    font-family: 'Poppins',sans-serif;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    outline: none;
+    border: none;
+}
+div h3{
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 42px;
     text-align: center;
 }
 
-#idSala, #chefeSala {
-    font-weight: bold;
+label{
+    display: block;
+    margin-top: 30px;
+    font-size: 16px;
+    font-weight: 500;
 }
-
-#listaUsuarios {
-    margin-top: 20px;
+input{
+    display: block;
+    height: 50px;
+    width: 100%;
+    background-color: rgba(255,255,255,0.07);
+    border-radius: 3px;
+    padding: 0 10px;
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 300;
 }
-
-.listaUsuariosItem {
-    margin-bottom: 5px;
+::placeholder{
+    color: #e5e5e5;
 }
-
-#informacaoRodada {
-    margin-top: 20px;
-    font-weight: bold;
-}
-
-#timer, #opcaoTexto {
-    display: none;
-    margin-top: 20px;
-}
-
-#textoInput {
-    width: calc(100% - 100px);
-    margin-right: 10px;
-    padding: 5px;
-}
-
-button {
-    padding: 10px;
-    margin: 10px;
-    background-color: #292929;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
+button{
+    margin-top: 50px;
+    width: 100%;
+    background-color: #ffffff;
+    color: #080710;
+    padding: 15px 0;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 5px;
     cursor: pointer;
 }
-
-button:hover {
-    background-color: #292929;
+p{
+    text-align: center;
+    margin-top: 20px;
 }

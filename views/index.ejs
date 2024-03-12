@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camaleão</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        div {
+            display: none;
+        }
+        div.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="active">
+        <form action="/criar-sala"  method="post">
+            <h3>Criar sala</h3>
+            <label for="Nome">Nome</label>
+            <input type="text" placeholder="Seu nome..." id="nome" name="nome">
+            <button>Criar</button>
+            <p><a href="#" class="toggle-form">Entrar com código</a></p>
+        </form>
+    </div>
+    <div>
+        <form action="/entrar-sala" method="post">
+            <h3>Entra na sala</h3>
+            <label for="nome">Nome</label>
+            <input type="text" placeholder="Seu nome..." id="nome" name="nome">
+            <label for="sala_id">ID da sala</label>
+            <input type="text" placeholder="ID da sala..." id="sala_id" name="sala_id">
+            <button>Entrar</button>
+            <p><a href="#" class="toggle-form">Criar sala</a></p>
+        </form>
+    </div>  
+    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleLinks = document.querySelectorAll('.toggle-form');
+
+            toggleLinks.forEach(link => {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault(); 
+
+                    const forms = document.querySelectorAll('div');
+                    forms.forEach(form => {
+                        form.classList.toggle('active');
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

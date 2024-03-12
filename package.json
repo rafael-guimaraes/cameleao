@@ -1,16 +1,15 @@
 {
-  "name": "camaleao",
+  "name": "cameleao-2",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node --watch app.js",
-    "start": "node app.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "Rafael Augusto",
+  "author": "",
   "license": "ISC",
   "dependencies": {
+    "ejs": "^3.1.9",
     "express": "^4.18.3",
     "socket.io": "^4.7.4"
   }

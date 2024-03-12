@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sala</title>
+    <style>
+        *,
+        *:before,
+        *:after{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body{
+            background-color: #080710;
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+        }
+
+        .div{
+            width: 400px;
+            background-color: rgba(255,255,255,0.13);
+            margin: 100px auto;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 40px rgba(8,7,16,0.6);
+            padding: 50px 35px;
+        }
+        h3{
+            font-size: 32px;
+            font-weight: 500;
+            line-height: 42px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h2{
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        ul{
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        li{
+            font-size: 18px;
+            font-weight: 300;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px;
+            border-radius: 5px;
+        }
+        label{
+            display: block;
+            margin-top: 30px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        input{
+            display: block;
+            height: 50px;
+            width: 100%;
+            background-color: rgba(255,255,255,0.07);
+            border-radius: 3px;
+            padding: 0 10px;
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 300;
+            color: #ffffff;
+        }
+        ::placeholder{
+            color: #e5e5e5;
+        }
+        button{
+            margin-top: 30px;
+            width: 100%;
+            background-color: #ffffff;
+            color: #080710;
+            padding: 15px 0;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover{
+            background-color: #e5e5e5;
+            color: #080710;
+        }
+        p{
+            text-align: center;
+            margin-top: 20px;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="div">
+        <h3>Bem-vindo!</h3>
+        
+        <div>
+            <h2>Jogadores</h2>
+            <ul id="lista-pessoas"></ul>
+        </div>
+        
+        <div id="envio-tema" style="display: none;">
+            <p id="tempo"></p>
+            <input type="text" id="tema" placeholder="Digite um lugar para a rodada...">
+            <button id="enviar">Enviar</button>
+        </div>
+        
+        <div>
+            <p id="info-rodada"></p>
+        </div>
+        
+        <button id="iniciar-rodada" style="visibility: hidden;">Iniciar rodada</button>
+        
+        <button id="convidar" style="visibility: hidden;">Convidar</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const nome_usuario = '<%= nome %>';
+        const id_sala = '<%= sala_id %>';
+        let dono = false;
+
+        document.getElementById('iniciar-rodada').addEventListener('click', () => {
+            socket.emit('iniciar_rodada');
+        });
+
+        document.getElementById('enviar').addEventListener('click', () => {
+            socket.emit('temas', {tema: document.getElementById('tema').value})
+        });
+
+        document.getElementById('convidar').addEventListener('click', () => {
+            navigator.clipboard.writeText(id_sala)
+                .then(() => {
+                    alert('ID da Sala copiado para a área de transferência: ' + id_sala);
+                })
+                .catch((error) => {
+                    console.error('Erro ao copiar o ID da Sala: ', error);
+                    alert('Erro ao copiar o ID da Sala. Por favor, tente novamente.');
+                });
+        });
+
+        socket.emit('entrar_sala', { id_sala: id_sala, nome_usuario: nome_usuario })
+        
+        socket.on('rodada', (valores) => {
+            if (valores.estado === 'iniciado') {
+                document.getElementById('envio-tema').style.display = 'block';
+                document.getElementById('info-rodada').style.display = 'none';
+                document.getElementById('tempo').textContent = `Restam 30 segundos.`;
+                document.getElementById('tema').value = '';
+                document.getElementById('iniciar-rodada').style.visibility = 'hidden';
+                document.getElementById('convidar').style.visibility = 'hidden';
+            } else if (valores.estado === 'entrada') {
+                document.getElementById('tempo').textContent = `Restam ${valores.tempo} segundos.`;
+            } else if (valores.estado === 'jogo') {
+                document.getElementById('envio-tema').style.display = 'none';
+                document.getElementById('info-rodada').style.display = 'block';
+                document.getElementById('convidar').style.visibility = 'visible';
+                if (dono)
+                    document.getElementById('iniciar-rodada').style.visibility = 'hidden';
+                if (valores.camaleao)
+                    document.getElementById('info-rodada').textContent = "Você é o camaleão!";
+                else
+                    document.getElementById('info-rodada').textContent = "O tema é : " + valores.tema;
+            }
+        });
+
+        socket.on('atualizar_pessoas_sala', (sala) => {
+            const listaPessoasElement = document.getElementById('lista-pessoas');
+            listaPessoasElement.innerHTML = '';
+            sala.pessoas.forEach((pessoa) => {
+                const li = document.createElement('li');
+                li.textContent = pessoa.nome;
+                listaPessoasElement.appendChild(li);
+                if (pessoa.nome == nome_usuario && pessoa.id == sala.dono.id)
+                    dono = true;
+            });
+            
+            const pessoasNaSala = sala.pessoas.length;
+            if (dono && pessoasNaSala > 2) {
+                document.getElementById('iniciar-rodada').style.visibility = 'visible';
+            } else {
+                document.getElementById('iniciar-rodada').style.visibility = 'hidden';
+            }
+        });
+
+        socket.on('erro', (mensagem) => {
+            alert(mensagem);
+            window.location = '/'
+        });
+    </script>
+</body>
+</html>
